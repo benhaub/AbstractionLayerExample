@@ -11,14 +11,6 @@ cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0079 NEW)
 cmake_policy(SET CMP0076 NEW)
 
-if (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
-  set(EXECUTABLE_SUFFIX ".Mach-O")
-elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
-  set(EXECUTABLE_SUFFIX ".elf")
-elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Windows")
-  set(EXECUTABLE_SUFFIX ".exe")
-endif()
-
 if (ESP_PLATFORM)
   #If not set, defaults to all components. Set this to reduce the amount of
   #components that are built at compile time. Required and linked components
@@ -34,7 +26,9 @@ if (ESP_PLATFORM)
   project(mainApplication)
   include(AbstractionLayer/esp.cmake)
   target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
-else()
+
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
+  set(EXECUTABLE_SUFFIX ".Mach-O")
   project(mainApplication)
   add_executable(${PROJECT_NAME}${EXECUTABLE_SUFFIX} "AppCode/main.cpp")
 
@@ -44,7 +38,19 @@ else()
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
   )
 
-  include(AbstractionLayer/desktop.cmake)
+  include(AbstractionLayer/macos.cmake)
+
+elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
+  set(EXECUTABLE_SUFFIX ".elf")
+  project(mainApplication)
+  add_executable(${PROJECT_NAME}${EXECUTABLE_SUFFIX} "AppCode/main.cpp")
+
+  set_target_properties(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
+    PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
+  )
+
+  include(AbstractionLayer/linux.cmake)
 endif()
 
 if (${RELEASE_BUILD})

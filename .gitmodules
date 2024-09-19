@@ -1,0 +1,3 @@
+[submodule "AbstractionLayer"]
+	path = AbstractionLayer
+	url = git@github.com:benhaub/AbstractionLayer.git

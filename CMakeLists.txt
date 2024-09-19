@@ -44,7 +44,7 @@ else()
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
   )
 
-  #include(AbstractionLayer/desktop.cmake)
+  include(AbstractionLayer/desktop.cmake)
 endif()
 
 if (${RELEASE_BUILD})

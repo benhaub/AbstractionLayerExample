@@ -36,7 +36,7 @@ if (ESP_PLATFORM)
   target_include_directories(__idf_main PRIVATE $<TARGET_PROPERTY:abstractionLayer,INTERFACE_INCLUDE_DIRECTORIES>)
 else()
   project(mainApplication)
-  add_executable(${PROJECT_NAME}${EXECUTABLE_SUFFIX} "appCode/main.cpp")
+  add_executable(${PROJECT_NAME}${EXECUTABLE_SUFFIX} "AppCode/main.cpp")
 
   #We can't do this for ESP projects because idf.py wants the bin directly in the build directory.
   set_target_properties(${PROJECT_NAME}${EXECUTABLE_SUFFIX}
@@ -80,4 +80,4 @@ else ()
 
 endif()
 
-add_subdirectory(appCode)
+add_subdirectory(AppCode)

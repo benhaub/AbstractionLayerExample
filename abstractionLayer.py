@@ -2,10 +2,7 @@
 #Date: April 19th, 2023                                                        #
 #File: fndd.py                                                                 #
 #Authour: Ben Haubrich                                                         #
-#Synopsis: An analog to idf.py for desktop builds (FouNDationDesktop.py)       #
-#          Provides convenience, but also provides the ability to constrain the#
-#          way in which developers build and run the executable instead of     #
-#          providing the raw tools and leaving it up to them                   #
+#Synopsis: Convenience script for executing various actions for the application#
 ################################################################################
 import argparse
 import subprocess

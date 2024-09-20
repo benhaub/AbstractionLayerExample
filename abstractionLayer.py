@@ -10,23 +10,21 @@
 import argparse
 import subprocess
 from shutil import which, rmtree
-from os import rename, remove, chdir
+from os import rename, remove, chdir, environ
 from pathlib import Path
 from platform import system
 
-def setCCompiler():
-  systemName = system()
+def setupForPlatform(systemName):
   if systemName == 'Darwin':
-      return which('gcc-12')
+      cxxCompiler = which('g++-12')
+      cCompiler =  which('gcc-12')
+      #https://gist.github.com/scivision/d69faebbc56da9714798087b56de925a
+      environ['SDKROOT'] = '/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk'
   elif systemName == 'Linux':
-      return which('gcc')
-
-def setCxxCompiler():
-  systemName = system()
-  if systemName == 'Darwin':
-      return which('g++-12')
-  elif systemName == 'Linux':
-      return which('g++')
+      cxxCompiler = which('g++')
+      cCompiler =  which('gcc')
+  
+  return systemName, cCompiler, cxxCompiler
 
 if __name__ == '__main__':
 
@@ -64,10 +62,9 @@ if __name__ == '__main__':
 
   #Uncomment for help with debugging.
   #print("{}".format(args))
-  buildFolderName = system() + '_build'
+  systemName, cCompiler, cxxCompiler = setupForPlatform(system())
+  buildFolderName = systemName + '_build'
   testFolderName = 'AbstractionLayer/AbstractionLayerTesting'
-  cCompiler = setCCompiler()
-  cxxCompiler = setCxxCompiler()
 
   path = Path(args.project_dir + '/' + buildFolderName)
 
@@ -85,7 +82,6 @@ if __name__ == '__main__':
                       '-G Ninja',
                       '-DCMAKE_C_COMPILER=' + cCompiler,
                       '-DCMAKE_CXX_COMPILER=' + cxxCompiler,
-                      '-DDEBUG_BUILD=1',
                       '-S' + '../' + args.project_dir.strip('\'')])
     elif (args.build_type[0].strip('\'').lower() == 'release'):
       subprocess.run(['cmake',
@@ -99,7 +95,6 @@ if __name__ == '__main__':
                       '-G Ninja',
                       '-DCMAKE_C_COMPILER=' + cCompiler,
                       '-DCMAKE_CXX_COMPILER=' + cxxCompiler,
-                      '-DDEBUG_BUILD=1',
                       '-S' + '../' + args.project_dir.strip('\'')])
 
     subprocess.run(['ninja'])

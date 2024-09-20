@@ -76,7 +76,7 @@ else ()
     -fdata-sections
     -fno-exceptions
     -O0
-    -g3
+    -g2
     -ggdb
     -Wextra
     -std=gnu++23

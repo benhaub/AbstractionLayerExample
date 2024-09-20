@@ -3,4 +3,4 @@
 
 #include <string>
 
-#endif
+#endif // __MAIN_HPP__

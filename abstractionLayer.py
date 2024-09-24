@@ -10,8 +10,10 @@ from shutil import which, rmtree
 from os import rename, remove, chdir, environ
 from pathlib import Path
 from platform import system
+from getpass import getuser
 
 def setupForPlatform(systemName):
+  rootPermissionRequired = False
   if systemName == 'Darwin':
       cxxCompiler = which('g++-12')
       cCompiler =  which('gcc-12')
@@ -20,8 +22,9 @@ def setupForPlatform(systemName):
   elif systemName == 'Linux':
       cxxCompiler = which('g++')
       cCompiler =  which('gcc')
+      rootPermissionRequired = True
   
-  return systemName, cCompiler, cxxCompiler
+  return systemName, cCompiler, cxxCompiler, rootPermissionRequired
 
 if __name__ == '__main__':
 
@@ -59,7 +62,7 @@ if __name__ == '__main__':
 
   #Uncomment for help with debugging.
   #print("{}".format(args))
-  systemName, cCompiler, cxxCompiler = setupForPlatform(system())
+  systemName, cCompiler, cxxCompiler, rootPermissionRequired = setupForPlatform(system())
   buildFolderName = systemName + '_build'
   testFolderName = 'AbstractionLayer/AbstractionLayerTesting'
 
@@ -99,6 +102,12 @@ if __name__ == '__main__':
     chdir('..')
 
   if '\'test\'' in args.command:
+    if (True == rootPermissionRequired and getuser() != 'root'):
+        print("The operating system module uses realtime scheduling which on this platform reuires root permission.")
+        print("Please re-run as root (i.e. `sudo python3 abstractionLayer.py build`), use a different platform,")
+        print("or create an operating system module that does not use realtime scheduling.")
+        print("https://stackoverflow.com/questions/46874369/thread-explicit-scheduling-posix-api-gives-error")
+        exit()
     chdir(testFolderName)
 
     subprocess.run(['cmake',

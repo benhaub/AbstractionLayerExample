@@ -38,7 +38,7 @@ elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
   )
 
-  include(AbstractionLayer/macos.cmake)
+  include(AbstractionLayer/darwin.cmake)
 
 elseif (${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Linux")
   set(EXECUTABLE_SUFFIX ".elf")

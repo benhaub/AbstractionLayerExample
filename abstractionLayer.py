@@ -102,7 +102,7 @@ if __name__ == '__main__':
     chdir('..')
 
   if '\'test\'' in args.command:
-    if (True == rootPermissionRequired and getuser() != 'root'):
+    if (True == rootPermissionRequired and getuser() != 'root' and systemName == 'Linux'):
         print("The operating system module uses realtime scheduling which on this platform reuires root permission.")
         print("Please re-run as root (i.e. `sudo python3 abstractionLayer.py build`), use a different platform,")
         print("or create an operating system module that does not use realtime scheduling.")

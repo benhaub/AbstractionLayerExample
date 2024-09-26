@@ -112,8 +112,8 @@ if __name__ == '__main__':
 
     subprocess.run(['cmake',
                     '-G Ninja',
-                    '-DCMAKE_C_COMPILER=' + which('gcc-12'),
-                    '-DCMAKE_CXX_COMPILER=' + which('g++-12'),
+                    '-DCMAKE_C_COMPILER=' + which(cCompiler),
+                    '-DCMAKE_CXX_COMPILER=' + which(cxxCompiler),
                     '-S .'])
     subprocess.run(['ninja'])
 

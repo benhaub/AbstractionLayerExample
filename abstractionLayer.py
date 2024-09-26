@@ -63,19 +63,19 @@ if __name__ == '__main__':
   #Uncomment for help with debugging.
   #print("{}".format(args))
   systemName, cCompiler, cxxCompiler, rootPermissionRequired = setupForPlatform(system())
-  buildFolderName = systemName + '_build'
+  buildDirectoryName = systemName + '_build'
   testFolderName = 'AbstractionLayer/AbstractionLayerTesting'
 
-  path = Path(args.project_dir + '/' + buildFolderName)
+  cmakeBuildDirectory = Path(args.project_dir + '/' + buildDirectoryName)
 
   if '\'clean\'' in args.command:
-    if path.exists():
-      rmtree(args.project_dir + '/' + buildFolderName)
+    if cmakeBuildDirectory.exists():
+      rmtree(args.project_dir + '/' + buildDirectoryName)
 
   if '\'build\'' in args.command and '\'test\'' not in args.command:
 
-    path.mkdir(parents=True, exist_ok=True)
-    chdir(buildFolderName)
+    cmakeBuildDirectory.mkdir(parents=True, exist_ok=True)
+    chdir(buildDirectoryName)
 
     if (args.build_type[0].strip('\'').lower() == 'debug'):
       subprocess.run(['cmake',

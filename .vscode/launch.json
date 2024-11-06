@@ -1,0 +1,62 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "MacOs Debug",
+            "program": "${workspaceFolder}\\Darwin_build\\bin\\mainApplication.Mach-O",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": true,
+            "MIMode": "lldb"
+        },
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "name": "Linux Debug",
+            "program": "${workspaceFolder}\\Linux_build\\bin\\mainApplication.elf",
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": true,
+            "MIMode": "gdb"
+        },
+        {
+            "type": "cppdbg",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "name": "ESP Debug",
+            "program": "${workspaceFolder}\\build\\mainApplication.elf",
+            "targetArchitecture": "arm",
+            "MIMode": "gdb",
+            "miDebuggerPath": "xtensa-esp32s3-elf-gdb",
+            "miDebuggerArgs": "-x gdbinit",
+            "setupCommands": [
+                {
+                    "text": "-environment-cd ${workspaceFolder}/build",
+                    "ignoreFailures": false
+                },
+                {
+                    "text": "-file-exec-and-symbols mainApplication.elf",
+                    "ignoreFailures": false
+                },
+                {
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": false
+                },
+                {
+                    "text": "set remotetimeout 20",
+                    "ignoreFailures": false
+                }
+            ],
+            "showDisplayString": false,
+            "miDebuggerServerAddress": "localhost:3333",
+            "launchCompleteCommand": "None",
+            "debugServerPath": "openocd",
+            "debugServerArgs": "-f board/esp32s3-builtin.cfg",
+            "filterStderr": true,
+            "filterStdout": true
+        }
+    ]
+}

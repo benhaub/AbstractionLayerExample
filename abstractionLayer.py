@@ -12,23 +12,50 @@ from pathlib import Path
 from platform import system
 from getpass import getuser
 
+def installProgram(systemName, programName):
+   if systemName == 'Darwin':
+      if None == which(programName):
+         subprocess.run(["brew", "install", programName])
+      elif systemName == 'Linux':
+         if 'ninja' == programName:
+            programName = 'ninja-build'
+         if None == which(programName):
+            subprocess.run(["sudo", "apt", "install", programName])
+
 def setupForPlatform(systemName):
   rootPermissionRequired = False
+  executableSuffix = '.elf'
+  debugger = 'gdb'
+
   if systemName == 'Darwin':
       cxxCompiler = which('g++-12')
       cCompiler =  which('gcc-12')
+      debugger = 'lldb'
+      executableSuffix = '.Mach-O'
       #https://gist.github.com/scivision/d69faebbc56da9714798087b56de925a
       environ['SDKROOT'] = '/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk'
+
+      requiredSoftware = ['gcc@12', 'cmake', 'ninja', 'git']
+      for software in requiredSoftware:
+         installProgram(systemName, software)
+
+      return systemName, cCompiler, cxxCompiler, executableSuffix, debugger, rootPermissionRequired
+
   elif systemName == 'Linux':
       cxxCompiler = which('g++')
       cCompiler =  which('gcc')
+      #In order to run the operating system on linux with the real-time scheduler settings you must run as root.
       rootPermissionRequired = True
-  
-  return systemName, cCompiler, cxxCompiler, rootPermissionRequired
+
+      requiredSoftware = ['cmake', 'ninja', 'git']
+      for software in requiredSoftware:
+         installProgram(systemName, software)
+
+      return systemName, cCompiler, cxxCompiler, executableSuffix, debugger, rootPermissionRequired
 
 if __name__ == '__main__':
 
-  parser = argparse.ArgumentParser(prog='fndd.py',
+  parser = argparse.ArgumentParser(prog='abstractionLayer.py',
                                        description='Run cmake projects on a desktop',
                                        epilog='Created by Ben Haubrich April 19th, 2024')
   #This first positional argument holds one or more arguments (nargs='+') so that when new positional commands are add below
@@ -62,11 +89,11 @@ if __name__ == '__main__':
 
   #Uncomment for help with debugging.
   #print("{}".format(args))
-  systemName, cCompiler, cxxCompiler, rootPermissionRequired = setupForPlatform(system())
-  buildDirectoryName = systemName + '_build'
-  testFolderName = 'AbstractionLayer/AbstractionLayerTesting'
+  systemName, cCompiler, cxxCompiler, executableSuffix, debugger, rootPermissionRequired = setupForPlatform(system())
 
+  buildDirectoryName = systemName + '_build'
   cmakeBuildDirectory = Path(args.project_dir + '/' + buildDirectoryName)
+  testFolderName = 'AbstractionLayer/AbstractionLayerTesting'
 
   if '\'clean\'' in args.command:
     if cmakeBuildDirectory.exists():

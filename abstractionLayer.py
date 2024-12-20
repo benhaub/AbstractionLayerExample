@@ -130,7 +130,7 @@ if __name__ == '__main__':
 
   if '\'test\'' in args.command:
     if (True == rootPermissionRequired and getuser() != 'root' and systemName == 'Linux'):
-        print("The operating system module uses realtime scheduling which on this platform reuires root permission.")
+        print("The operating system module uses realtime scheduling which on this platform requires root permission.")
         print("Please re-run as root (i.e. `sudo python3 abstractionLayer.py test`), use a different platform,")
         print("or create an operating system module that does not use realtime scheduling.")
         print("https://stackoverflow.com/questions/46874369/thread-explicit-scheduling-posix-api-gives-error")

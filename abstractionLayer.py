@@ -33,7 +33,7 @@ def setupForPlatform(systemName):
       debugger = 'lldb'
       executableSuffix = '.Mach-O'
       #https://gist.github.com/scivision/d69faebbc56da9714798087b56de925a
-      environ['SDKROOT'] = '/Library/Developer/CommandLineTools/SDKs/MacOSX12.sdk'
+      environ['SDKROOT'] = '/Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk'
 
       requiredSoftware = ['gcc@12', 'cmake', 'ninja', 'git']
       for software in requiredSoftware:
